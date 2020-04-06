@@ -14,6 +14,7 @@ const Keyboard = {
   properties: {
     value: '',
     capsLock: false,
+    lang: false,
   },
 
   init() {
@@ -22,7 +23,7 @@ const Keyboard = {
     this.elements.keysContainer = document.createElement('div')
 
     // Setup main elements
-    this.elements.main.classList.add('keyboard', 'keyboard--hidden')
+    this.elements.main.classList.add('keyboard', '1keyboard--hidden')
     this.elements.keysContainer.classList.add('keyboard__keys')
     this.elements.keysContainer.appendChild(this._createKeys())
 
@@ -44,10 +45,18 @@ const Keyboard = {
   _createKeys() {
     const fragment = document.createDocumentFragment()
     const keyLayout = [
-      '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'backspace',
-      'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
-      'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'enter',
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+      'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 'enter',
       'done', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?',
+      'space',
+    ]
+
+    const keyLayoutRus = [
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ',
+      'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
+      'done', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.',
       'space',
     ]
 
@@ -70,6 +79,7 @@ const Keyboard = {
           keyElement.addEventListener('click', () => {
             this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1)
             this._triggerEvent('oninput')
+            console.log();
           })
 
           break
@@ -151,6 +161,16 @@ const Keyboard = {
     for (const key of this.elements.keys) {
       if (key.childElementCount === 0) {
         key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase()
+      }
+    }
+  },
+
+  _changeKeyboardLayout() {
+    this.properties.lang = !this.properties.lang
+
+    for(const key of this.elements.keys) {
+      if (key.childElementCount === 0) {
+        //
       }
     }
   },
