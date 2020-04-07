@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const Keyboard = {
   elements: {
+    textarea: null,
     main: null,
     keysContainer: null,
     keys: [],
@@ -18,6 +19,22 @@ const Keyboard = {
   },
 
   init() {
+    // Create h1 and textarea
+    const vkHeader = document.createElement('h1');
+    vkHeader.innerHTML = "Virtual Keyboard";
+    vkHeader.classList.add('title');
+    document.body.append(vkHeader)
+
+    const vkHeaderDescription = document.createElement('p')
+    vkHeaderDescription.innerText = "ОС: Windows, Ru/En: Ctrl-Alt"
+    vkHeaderDescription.classList.add('title__description')
+    document.body.appendChild(vkHeaderDescription);
+
+    const textarea = document.createElement('textarea');
+    textarea.classList.add('use-keyboard-input')
+    document.body.appendChild(textarea)
+
+
     // Create main elements
     this.elements.main = document.createElement('div')
     this.elements.keysContainer = document.createElement('div')

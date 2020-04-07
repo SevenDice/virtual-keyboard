@@ -2,6 +2,9 @@
   text-align: center;
 }
 
+.title__description {
+  text-align: center;
+}
 .textarea {
   display: flex;
   align-items: center;
@@ -9,7 +12,8 @@
 
 textarea {
   margin: 10px;
-  width: 100%;
+  width: 90%;
+  height: 500px;
 }
 
 .keyboard {
