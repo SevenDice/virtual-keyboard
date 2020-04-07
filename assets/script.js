@@ -26,7 +26,7 @@ const Keyboard = {
     document.body.append(vkHeader)
 
     const vkHeaderDescription = document.createElement('p')
-    vkHeaderDescription.innerText = "ОС: Windows, Ru/En: Ctrl-Alt"
+    vkHeaderDescription.innerText = "ОС: Windows"
     vkHeaderDescription.classList.add('title__description')
     document.body.appendChild(vkHeaderDescription);
 
