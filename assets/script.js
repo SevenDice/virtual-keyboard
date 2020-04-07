@@ -15,14 +15,14 @@ const Keyboard = {
   properties: {
     value: '',
     capsLock: false,
-    lang: false,
+    lang: true,
   },
 
   init() {
     // Create h1 and textarea
-    const vkHeader = document.createElement('h1');
-    vkHeader.innerHTML = "Virtual Keyboard";
-    vkHeader.classList.add('title');
+    const vkHeader = document.createElement('h1')
+    vkHeader.innerHTML = "Virtual Keyboard"
+    vkHeader.classList.add('title')
     document.body.append(vkHeader)
 
     const vkHeaderDescription = document.createElement('p')
@@ -30,17 +30,20 @@ const Keyboard = {
     vkHeaderDescription.classList.add('title__description')
     document.body.appendChild(vkHeaderDescription);
 
-    const textarea = document.createElement('textarea');
+    const textarea = document.createElement('textarea')
     textarea.classList.add('use-keyboard-input')
+    textarea.id = 'textarea-id'
+
     document.body.appendChild(textarea)
 
+    let lang = localStorage.getItem('lang') || 'en'
 
     // Create main elements
     this.elements.main = document.createElement('div')
     this.elements.keysContainer = document.createElement('div')
 
     // Setup main elements
-    this.elements.main.classList.add('keyboard', '1keyboard--hidden')
+    this.elements.main.classList.add('keyboard', 'keyboard--hidden')
     this.elements.keysContainer.classList.add('keyboard__keys')
     this.elements.keysContainer.appendChild(this._createKeys())
 
@@ -61,29 +64,38 @@ const Keyboard = {
   },
   _createKeys() {
     const fragment = document.createDocumentFragment()
-    const keyLayout = [
+
+    const keyLayoutEn = [
       '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-      'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+      'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
       'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 'enter',
-      'done', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?',
+      'done','layout', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?',
       'space',
     ]
 
     const keyLayoutRus = [
       '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-      'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ',
+      'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ',
       'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
-      'done', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.',
+      'done','layout', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.',
       'space',
     ]
 
+    let keyLayout
+
+    if (this.properties.lang) {
+      keyLayout = keyLayoutEn
+    } else {
+      keyLayout = keyLayoutRus
+    }
+    
     // Creates HTML for an icon
     const createIconHTML = icon_name => `<i class="material-icons">${icon_name}</i>`
 
     keyLayout.forEach(key => {
       const keyElement = document.createElement('button')
       const insertLineBreak = ['backspace', 'p', 'enter', '?'].indexOf(key) !== -1
-
+      const insertLineBreakRU = ['backspace', 'ъ', 'enter', '.'].indexOf(key) !== -1
       // Add attributes/classes
       keyElement.setAttribute('type', 'button')
       keyElement.classList.add('keyboard__key')
@@ -145,6 +157,28 @@ const Keyboard = {
 
           break
 
+          case 'tab':
+          keyElement.classList.add('keyboard__key--wide')
+          keyElement.innerHTML = createIconHTML('keyboard_tab')
+
+          keyElement.addEventListener('click', () => {
+            this.properties.value += '     '
+            this._triggerEvent('oninput')
+          })
+
+          break
+
+          case 'layout':
+          keyElement.classList.add('keyboard__key--wide')
+          keyElement.innerHTML = createIconHTML('language')
+
+          keyElement.addEventListener('click', () => {
+            console.log('object')
+            this._changeKeyboardLayout()
+          })
+
+          break
+
         default:
           keyElement.textContent = key.toLowerCase()
 
@@ -160,7 +194,7 @@ const Keyboard = {
 
       if (insertLineBreak) {
         fragment.appendChild(document.createElement('br'))
-      }
+      } 
     })
 
     return fragment
@@ -184,12 +218,6 @@ const Keyboard = {
 
   _changeKeyboardLayout() {
     this.properties.lang = !this.properties.lang
-
-    for(const key of this.elements.keys) {
-      if (key.childElementCount === 0) {
-        //
-      }
-    }
   },
 
   open(initialValue, oninput, onclose) {
@@ -209,6 +237,7 @@ const Keyboard = {
 
 window.addEventListener('DOMContentLoaded', () => {
   Keyboard.init()
+  
   // Keyboard.open("dcode", function(currentValue) {
   //   console.log("value changed! here it is: " + currentValue);
   // }, function (currentValue) {
